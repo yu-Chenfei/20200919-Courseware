@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>放大镜</title>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		#sp {
+			margin-left: 100px;
+			width: 300px;
+			height: 300px;
+			background-image: url(img/pkq.jpg);
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+			border: 1px solid lightgray;
+			float: left;
+			position: relative;
+		}
+		#mirror {
+			width: 400px;
+			height: 400px;
+			background-color: cyan;
+			border: 1px solid lightgray;
+			float: left;
+			overflow: hidden;
+			position: relative;
+			display: none;
+		}
+		#slider {
+			width: 150px;
+			height: 150px;
+			background-color: rgba(255,255,0,.4);
+			display: none;
+			position: absolute;
+
+		}
+		#mirror img {
+			width: 800px;
+			height: 800px;
+			position: absolute;
+		}
+	</style>
+</head>
+<body>
+	<div id="sp">
+		<div id="slider"></div>
+	</div>
+	<div id="mirror">
+		<img id="bImg" src="img/pkq.jpg">
+	</div>
+</body>
+<script type="text/javascript">
+	// 1. slider mirror  显示与隐藏
+	// 2. slider 与 img  互联
+
+	function $(idName) {
+		return document.getElementById(idName);
+	}
+	var slider = $("slider");
+	var mirror = $("mirror");
+	var sp = $("sp");
+	var img = $("bImg");
+
+	sp.onmousemove = function(e) {
+		slider.style.display = "block";
+		mirror.style.display = "block";
+
+		// 1. 让slider跟随指针移动
+		var e = e || window.event;
+		// (x,y)指针的位置
+		var x = e.clientX - this.offsetLeft-1;
+		var y = e.clientY - this.offsetTop-1;
+
+		// （x1,y1）slider的起点
+		var x1 = x - slider.offsetWidth/2;
+		var y1 = y - slider.offsetHeight/2;
+
+		// 4个if，对4个边进行限制
+		if(x1 < 0) {
+			x1 = 0;
+		}
+		if(y1 < 0) {
+			y1 = 0;
+		}
+		if(x1 > sp.offsetWidth-2-slider.offsetWidth) {
+			x1 = sp.offsetWidth-2-slider.offsetWidth;
+		}
+		if (y1 > sp.offsetHeight-2 - slider.offsetHeight) {
+			y1 = sp.offsetHeight-2 - slider.offsetHeight;
+		}
+
+		slider.style.left = x1 + 'px';
+		slider.style.top = y1 + 'px';
+
+		// 2. 让bImg产生偏移
+		// x1/w1 = -x2/w2
+		// x2 = -x1*w2/w1
+		var x2 = -x1 * img.offsetWidth / (sp.offsetWidth-2);
+		var y2 = -y1 * img.offsetHeight / (sp.offsetHeight-2);
+
+		img.style.left = x2 + 'px';
+		img.style.top = y2 + 'px';
+
+	}
+	sp.onmouseleave = function() {
+		slider.style.display = "none";
+		mirror.style.display = "none";
+	}
+</script>
+</html>
+
+
+
+
+
+
+

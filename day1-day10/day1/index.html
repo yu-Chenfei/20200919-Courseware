@@ -1,205 +1,211 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-	<title>炫酷时间</title>
-	<style>
-		* {
-			margin: 0;
-			padding: 0;
-			list-style: none;
-		}
-		.wrap {
-			width: 1200px;
-			height: 500px;
-			margin: 20px auto;
-			position: relative;
-			overflow: hidden;
-			box-shadow: 1px 1px 1px lightgray, -1px -1px 1px lightgray;
-		}
-		.wrap div {
-			/*6个数字矩形区域*/
-			width: 70px;
-			height: 100px;
-	/*		background-color: pink;*/
-			float: left;
-			margin-top: 100px;
-		}
-		.colorful {
-			position: absolute;
-		}
-	</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>炫酷时间</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .wrap {
+      width: 1200px;
+      height: 500px;
+      margin: 20px auto;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 1px 1px 1px lightgray, -1px -1px 1px lightgray;
+    }
+
+    .wrap div {
+      /*6个数字矩形区域*/
+      width: 70px;
+      height: 100px;
+      /*		background-color: pink;*/
+      float: left;
+      margin-top: 100px;
+    }
+
+    .colorful {
+      position: absolute;
+    }
+  </style>
 </head>
+
 <body>
-	<div class="wrap">
-		<div class="h1" style="margin-left: 200px;"></div>
-		<div class="h2" style="margin-left: 20px;"></div>
-		<div class="m1" style="margin-left: 170px;"></div>
-		<div class="m2" style="margin-left: 20px;"></div>
-		<div class="s1" style="margin-left: 170px;"></div>
-		<div class="s2" style="margin-left: 20px;"></div>
-	</div>
+  <div class="wrap">
+    <div class="h1" style="margin-left: 200px;"></div>
+    <div class="h2" style="margin-left: 20px;"></div>
+    <div class="m1" style="margin-left: 170px;"></div>
+    <div class="m2" style="margin-left: 20px;"></div>
+    <div class="s1" style="margin-left: 170px;"></div>
+    <div class="s2" style="margin-left: 20px;"></div>
+  </div>
 </body>
 <script src="number.js"></script>
 <script>
-//	项目中的功能
-//	1. 普通球计时
-//	2. 彩球飞散
+  //	项目中的功能
+  //	1. 普通球计时
+  //	2. 彩球飞散
 
-//	抽象的事情
-//	抽: 提取
-//	象: 特征
-//1. 都是球
-//2. 数字是有多个球组成的:
-//在这里把数字当成一个矩形div,矩形div内有多个球按一定的规律排列
-//整个项目中需要6个这样的矩形div
-//3. 彩色球是数字变化时产生的
+  //	抽象的事情
+  //	抽: 提取
+  //	象: 特征
+  //1. 都是球
+  //2. 数字是有多个球组成的:
+  //在这里把数字当成一个矩形div,矩形div内有多个球按一定的规律排列
+  //整个项目中需要6个这样的矩形div
+  //3. 彩色球是数字变化时产生的
 
-//问题: 垂直方向运动不合理
-//1. 定位  (主要)
-//2. 速度给与
-
-
-//获取元素
-var wrapDiv = document.querySelector(".wrap");
-//6个数字矩形区域 
-var h1 = document.querySelector(".h1");
-var h2 = document.querySelector(".h2");
-var m1 = document.querySelector(".m1");
-var m2 = document.querySelector(".m2");
-var s1 = document.querySelector(".s1");
-var s2 = document.querySelector(".s2");
-
-//用来存储彩色球
-var colors = [];
-
-//开启计时器
-var timer = setInterval(function() {
-	//获取当前时间
-	var date = new Date();
-	var hour = date.getHours();
-	var minutes = date.getMinutes();
-	var seconds = date.getSeconds();
-//	将对应的时间参数传给对应的矩形div来进行数字的布局
-	//小时
-	setTime(h1,Math.floor(hour/10));
-	setTime(h2,hour%10);
-//	分钟
-	setTime(m1,Math.floor(minutes/10));
-	setTime(m2,minutes%10);
-//	秒钟
-	setTime(s1,Math.floor(seconds/10));
-	setTime(s2,seconds%10);
-	
-	//彩色球的运动
-//	colorfulMove();
-},30)
-
-//彩色球运动
-function colorfulMove() {
-	for (var i=0; i<colors.length; i++) {
-//		之前的效果电脑越来越卡,  因为colorfulball只创建未删除
-//		飞出wrap区域的彩色球应该被删掉
-		var c = colors[i];
-		var left = c.offsetLeft + c.speedX;
-		var top = c.offsetTop + c.speedY;
-		console.log(top);
-		if (left <= -10 || left >= wrapDiv.offsetWidth || top <= 10 || top >= wrapDiv.offsetHeight) {
-//			飞出去了
-			wrapDiv.removeChild(c);  //父级删除子节点
-			colors.splice(i,1);   //数组删除子内容
-			i--; //防止漏掉元素
-			continue;  //跳过本次循环
-		}
-		c.style.left = left + 'px';
-		c.style.top = top + 'px';
-	}
-}
-
-//	完成数字的布局
-// el: 矩形区域的div元素
-// n:需要显示的数字
-//通过el可以获取到el的left和top值
-//球的left = el.left + n * 单位宽度(10)
-function setTime(el, n) {
-	var isColorful = false; //是否创建彩色球
-//	当数字没有发生变化的时候提前结束函数,没必要清空再创建
-	if (n == el.nowNumber) {
-		return;
-	} 
-//	else {
-//		isColorful = true;
-//	}
-	//记录下现在的数字
-	el.nowNumber = n;
-//	每次进来的时候记得将el清空
-	el.innerHTML = "";
-	var left = el.offsetLeft;
-	var top = el.offsetTop;  //有问题，回头看看
-	var arr = [];
-	arr = nums[n];  //获取数字所对应的的数组
-	for (var i=0; i<arr.length; i++) {
-//		外层循环获取每一个小数组,代表的是哪一层
-		var smallArr = arr[i];
-		for (var j=0; j<smallArr.length; j++) {
-//			拿到具体的下标值
-//			创建ball,并且添加到对应的el中
-			var index = smallArr[j];
-			var l = left + index * 10;
-			var t = top + i * 10;
-			var ball = createBall(l,t);
-			el.appendChild(ball);
-			
-			//创建彩色球
-//			当数字变化的时候,需要清空普通球,
-//			这个时候也会清空彩色球,就会出现逻辑上bug
-//			不能把彩色球加载矩形div上,应该加载wrap上
-			if (isColorful) {
-				var colorfulBall = createBall(l,t);
-				colorfulBall.className = "colorful";				
-				colorfulBall.style.backgroundColor = randColor();
-				var sx = 1;
-				var sy = 1;
-				colorfulBall.speedX = (Math.random() > 0.5 ? sx : -sx);
-				colorfulBall.speedY = (Math.random() > 0.5 ? sy : -sy);
-				wrapDiv.appendChild(colorfulBall);
-				//将彩色球加入到数组中
-				colors.push(colorfulBall);
-			}
-		}
-	}
-}
-
-//随机数
-function rand(min,max) {
-	return Math.round(Math.random() * (max-min) + min);
-}
-
-//随机颜色
-function randColor() {
-	var r = rand(0,255);
-	var g = rand(0,255);
-	var b = rand(0,255);
-	return `rgb(${r},${g},${b})`;
-}
+  //问题: 垂直方向运动不合理
+  //1. 定位  (主要)
+  //2. 速度给与
 
 
-//准备工作
-//这个函数是用来返回一个球的, 这些球是属于矩形div的
-function createBall(left,top) {
-	var div = document.createElement("div");
-	div.style.borderRadius = "50%";
-	div.style.width = "10px";
-	div.style.height = "10px";
-	div.style.position = "absolute";
-	div.style.backgroundColor = "deepskyblue";
-	div.style.left = left + 'px';
-	div.style.top = top + 'px';
-	return div;
-}
+  //获取元素
+  var wrapDiv = document.querySelector(".wrap");
+  //6个数字矩形区域 
+  var h1 = document.querySelector(".h1");
+  var h2 = document.querySelector(".h2");
+  var m1 = document.querySelector(".m1");
+  var m2 = document.querySelector(".m2");
+  var s1 = document.querySelector(".s1");
+  var s2 = document.querySelector(".s2");
+
+  //用来存储彩色球
+  var colors = [];
+
+  //开启计时器
+  var timer = setInterval(function () {
+    //获取当前时间
+    var date = new Date();
+    var hour = date.getHours();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
+    //	将对应的时间参数传给对应的矩形div来进行数字的布局
+    //小时
+    setTime(h1, Math.floor(hour / 10));
+    setTime(h2, hour % 10);
+    //	分钟
+    setTime(m1, Math.floor(minutes / 10));
+    setTime(m2, minutes % 10);
+    //	秒钟
+    setTime(s1, Math.floor(seconds / 10));
+    setTime(s2, seconds % 10);
+
+    //彩色球的运动
+    //	colorfulMove();
+  }, 30)
+
+  //彩色球运动
+  function colorfulMove() {
+    for (var i = 0; i < colors.length; i++) {
+      //		之前的效果电脑越来越卡,  因为colorfulball只创建未删除
+      //		飞出wrap区域的彩色球应该被删掉
+      var c = colors[i];
+      var left = c.offsetLeft + c.speedX;
+      var top = c.offsetTop + c.speedY;
+      console.log(top);
+      if (left <= -10 || left >= wrapDiv.offsetWidth || top <= 10 || top >= wrapDiv.offsetHeight) {
+        //			飞出去了
+        wrapDiv.removeChild(c);  //父级删除子节点
+        colors.splice(i, 1);   //数组删除子内容
+        i--; //防止漏掉元素
+        continue;  //跳过本次循环
+      }
+      c.style.left = left + 'px';
+      c.style.top = top + 'px';
+    }
+  }
+
+  //	完成数字的布局
+  // el: 矩形区域的div元素
+  // n:需要显示的数字
+  //通过el可以获取到el的left和top值
+  //球的left = el.left + n * 单位宽度(10)
+  function setTime(el, n) {
+    var isColorful = false; //是否创建彩色球
+    //	当数字没有发生变化的时候提前结束函数,没必要清空再创建
+    if (n == el.nowNumber) {
+      return;
+    }
+    //	else {
+    //		isColorful = true;
+    //	}
+    //记录下现在的数字
+    el.nowNumber = n;
+    //	每次进来的时候记得将el清空
+    el.innerHTML = "";
+    var left = el.offsetLeft;
+    var top = el.offsetTop;  //有问题，回头看看
+    var arr = [];
+    arr = nums[n];  //获取数字所对应的的数组
+    for (var i = 0; i < arr.length; i++) {
+      //		外层循环获取每一个小数组,代表的是哪一层
+      var smallArr = arr[i];
+      for (var j = 0; j < smallArr.length; j++) {
+        //			拿到具体的下标值
+        //			创建ball,并且添加到对应的el中
+        var index = smallArr[j];
+        var l = left + index * 10;
+        var t = top + i * 10;
+        var ball = createBall(l, t);
+        el.appendChild(ball);
+
+        //创建彩色球
+        //			当数字变化的时候,需要清空普通球,
+        //			这个时候也会清空彩色球,就会出现逻辑上bug
+        //			不能把彩色球加载矩形div上,应该加载wrap上
+        if (isColorful) {
+          var colorfulBall = createBall(l, t);
+          colorfulBall.className = "colorful";
+          colorfulBall.style.backgroundColor = randColor();
+          var sx = 1;
+          var sy = 1;
+          colorfulBall.speedX = (Math.random() > 0.5 ? sx : -sx);
+          colorfulBall.speedY = (Math.random() > 0.5 ? sy : -sy);
+          wrapDiv.appendChild(colorfulBall);
+          //将彩色球加入到数组中
+          colors.push(colorfulBall);
+        }
+      }
+    }
+  }
+
+  //随机数
+  function rand(min, max) {
+    return Math.round(Math.random() * (max - min) + min);
+  }
+
+  //随机颜色
+  function randColor() {
+    var r = rand(0, 255);
+    var g = rand(0, 255);
+    var b = rand(0, 255);
+    return `rgb(${r},${g},${b})`;
+  }
+
+
+  //准备工作
+  //这个函数是用来返回一个球的, 这些球是属于矩形div的
+  function createBall(left, top) {
+    var div = document.createElement("div");
+    div.style.borderRadius = "50%";
+    div.style.width = "10px";
+    div.style.height = "10px";
+    div.style.position = "absolute";
+    div.style.backgroundColor = "deepskyblue";
+    div.style.left = left + 'px';
+    div.style.top = top + 'px';
+    return div;
+  }
 </script>
+
 </html>
 
 <!--塌陷问题   原因  及 解决方案   10遍
