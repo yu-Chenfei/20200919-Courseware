@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>拓展版瀑布流</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			
+			ul {
+				position: relative;
+				margin: 0 auto;
+				position: relative;
+			}
+			
+			li {
+				transition: .3s;
+				width: 190px;
+				margin-left: 5px;
+				background-color: deepskyblue;
+				color: white;
+				font-size: 3em;
+				text-align: center;
+				position: absolute;
+			}
+		</style>
+	</head>
+
+	<body>
+		<ul></ul>
+	</body>
+	<script>
+		var ul = document.querySelector("ul");
+		var myWidth = 200; //虚拟列宽
+		var col = 0; //列数
+		var arr = []; //用来存储每一个虚拟列的高度
+		//设置ul的宽度 
+		function setUl() {
+			//			（取整数)列数 = 浏览器当前的宽度 / 列宽
+			var newcol = window.innerWidth / myWidth;
+			newcol = Math.floor(newcol);
+			if (newcol === col) {
+				//列数没有变  没必要执行下述的代码
+				return;
+			}
+			col = newcol;
+			//			重新设置ul的宽度
+			ul.style.width = col * myWidth + 'px';
+			//			填充数组
+			arr = [];
+			for(var i = 0; i < col; i++) {
+				arr.push(0);
+			}
+			//			设置li
+			setLi();
+		}
+		setUl();
+
+		//		设置li
+		function setLi() {
+			//页面第一次进来时  lis为空
+			var lis = document.querySelectorAll("li");
+			for(var i = 0; i < 100; i++) {
+				var li = lis[i];
+				var h = 0;
+				if(li) {
+//					li存在
+					h = li.offsetHeight;
+				} else {
+					//					li不存在
+					li = document.createElement("li");
+					li.innerHTML = i + 1;
+					h = rand(100, 300);
+					li.style.height = h + 'px';
+					li.style.lineHeight = h + 'px';
+					ul.appendChild(li);
+				}
+				var min = getMin(arr);
+				var x = 5 + myWidth * min;
+				var y = arr[min];
+				li.style.left = x + 'px'
+				li.style.top = y + 'px';
+				//将新li的高度添加到对应列
+				arr[min] += (h + 10);
+			}
+		}
+
+		//添加resize事件
+		window.onresize = function() {
+			setUl();
+		}
+
+		//随机数
+		function rand(min, max) {
+			return Math.round(Math.random() * (max - min) + min);
+		}
+		//		获取数组最小值的下标
+		function getMin(arr) {
+			var min = 0;
+			for(var i = 1; i < arr.length; i++) {
+				if(arr[min] > arr[i]) {
+					min = i;
+				}
+			}
+			return min;
+		}
+	</script>
+
+</html>
