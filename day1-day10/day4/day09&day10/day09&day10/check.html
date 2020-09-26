@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>check crash</title>
+    <style>
+        div {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div style="background-color: red;left: 10px"></div>
+    <div style="background-color: green;left: 200px"></div>
+</body>
+<script>
+    var d1 = document.querySelector("div:nth-of-type(1)");
+    var d2 = document.querySelector("div:nth-of-type(2)");
+
+    d1.sx = rand(-10,10);
+    d1.sy = rand(-10,10);
+
+    setInterval(function() {
+        console.log(12);
+        var left = d1.offsetLeft + d1.sx;
+        var top = d1.offsetTop + d1.sy;
+        if (left <= 0 || left >= window.innerWidth - 100) {
+            d1.sx *= -1;
+            return;
+        } 
+        if (top <=0 || top >= window.innerHeight - 100) {
+            d1.sy *= -1;
+            return;
+        }
+        d1.style.left = left + 'px';
+        d1.style.top = top + 'px';
+
+        if (isCrash(d1,d2)) {
+            //碰了
+            d2.style.backgroundColor = "gold";
+        } else {
+            //没碰
+            d2.style.backgroundColor = "green";
+        }
+
+    }, 30);
+
+    //碰撞检测 
+    // a b 两个元素
+    function isCrash(a,b) {
+        var l1 = a.offsetLeft;
+        var t1 = a.offsetTop;
+        var r1 = l1 + a.offsetWidth;
+        var b1 = t1 + a.offsetHeight;
+
+        var l2 = b.offsetLeft;
+        var t2 = b.offsetTop;
+        var r2 = l2 + b.offsetWidth;
+        var b2 = t2 + b.offsetHeight;
+
+        if (r1<l2 || r2<l1 || b1<t2 || b2<t1) {
+            //不碰撞
+            return false;
+        } else {
+            //碰了
+            return true;
+        }
+    }
+
+    function rand(min,max) {
+        return Math.round(Math.random() * (max-min) + min);
+    }
+</script>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>飞机大战</title>
+		<link rel="stylesheet" href="css/reset.css" />
+		<style>
+		/*@keyframes bgRoll {
+			from {
+				background-position: 0 0;
+			}
+			to {
+				background-position: 0 568px;
+			}
+		}*/
+			.wrap {
+				width: 320px;
+				height: 568px;
+				overflow: hidden;
+				background-color: skyblue;
+				background-image: url(img/background.png);
+				background-size: 100% 100%;
+				position: relative;
+				/*有局限性*/
+				/*animation: bgRoll 2s linear infinite;*/
+			}
+			#hero {
+				width: 66px;
+				height: 82px;
+				background-image: url(img/herofly.png);	
+				position: absolute;
+				/*bottom: 0;*/
+				/*left: 50%;
+				margin-left: -33px;*/
+			}
+			.enemy {
+				position: absolute;
+			}
+			.buttle {
+				position: absolute;
+				width: 6px;
+				height: 14px;
+				background-image: url(img/bullet1.png);
+			}
+			.prop {
+				position: absolute;
+				background-image: url(img/prop.png);
+				/* background-repeat: no-repeat; */
+				width: 39px;
+				height: 68px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<div id="hero"></div>
+			<div id="enemy">
+				<!--这个容器只是管理上的父级，不是定位父级-->
+				<!--<div class="enemy"></div>-->
+			</div>
+			<div id="buttle">
+				<!--管理上的父级-->
+				<!-- <div class="buttle"></div> -->
+			</div>
+			<div id="prop">
+				<!--管理上的父级-->
+				<!-- <div class="prop"></div> -->
+			</div>
+		</div>
+	</body>
+	<script src="js/public.js"></script>
+	<script src="js/bg.js"></script>
+	<script>
+		//本页面的一些功能
+		//获取元素
+		var wrap = document.querySelector(".wrap");
+		//获取当前浏览器的大小
+		var sw = window.innerWidth;
+		var sh = window.innerHeight;
+//		所有动画 的实现入口
+		var timer = null;
+//		1. 适配 pc下  wrap 320*568 phone下 屏幕大小
+		if (isPhone()) {
+			//phone
+			wrap.style.width = sw + 'px';
+			wrap.style.height = sh + 'px';
+		} else {
+			//pc
+			sw = 320;
+			sh = 568;
+			wrap.style.width = 320 + 'px';
+			wrap.style.height = 568 + 'px';
+		}
+//		2. 动画的入口
+		timer = setInterval(function() {
+//			1. 背景图滚动
+			bgRoll(wrap, sh);
+//			2. hero的操作 
+			heroMove();
+//			3. enemy的创建与运动
+			enemyMove();
+//			4. buttle的创建与运动
+			buttleMove();
+//			5. props的创建与运动
+			propMove();
+//			6. 碰撞检测
+			check();
+		}, 30)
+	</script>
+	<script src="js/hero.js"></script>
+	<script src="js/enemy.js"></script>
+	<script src="js/buttle.js"></script>
+	<script src="js/prop.js"></script>
+	<script src="js/check.js"></script>
+</html>

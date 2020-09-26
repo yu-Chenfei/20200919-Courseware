@@ -1,123 +1,134 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<title>飞机大战</title>
-		<link rel="stylesheet" type="text/css" href="css/reset.css"/>
-		<style>
-			#wrap {
-				width: 320px;
-				height: 568px;
-				background-image: url(img/background.png);
-				background-size: 100% 100%;
-				background-repeat: repeat-y;
-				position: relative;
-				overflow: hidden;
-			}
-			#hero {
-				width: 66px;
-				height: 82px;
-				background-image: url(img/herofly.png);
-				position: absolute;
-			}
-			.bullet {
-				width: 6px;
-				height: 14px;
-				background-image: url(img/bullet1.png);
-				position: absolute;
-			}
-			.enemy{
-				width: 38px;
-				height: 34px;
-				background-image: url(img/enemy1.png);
-				position: absolute;
-				top: -34px;
-			}
-			#score {
-				position: absolute;
-				left: 10px;
-				top: 10px;
-				font-size: 20px;
-			}
-			#show {
-				width: 200px;
-				height: 140px;
-				background-color: lightgray;
-				border: 1px solid #000;
-				border-radius: 4px;
-				position: absolute;
-				z-index: 1;
-			}
-			#word {
-				text-align: center;
-				margin-top: 40px;
-				font-size: 20px;
-			}
-			#ok {
-				width: 60px;
-				height: 30px;
-				margin: 20px auto;
-				border: 1px solid #000000;
-				border-radius: 4px;
-				text-align: center;
-			}
-			#ok:hover {
-				cursor: pointer;
-			}
-		</style>
-	</head>
-	<body>
-		<div id="wrap">
-			<p id="score">分数:0</p>
-			<div id="hero"></div>
-			<!--<div class="bullet"></div>-->
-			<!--<div class="enemy"></div>-->
-			<div id="show">
-				<p id="word">#####</p>
-				<div id="ok">👌</div>
-			</div>
-		</div>
-	</body>
-	<script src="js/public.js"></script>
-	<script src="js/device.js"></script>
-	<script src="js/bg.js"></script>
-	<script src="js/hero.js"></script>
-	<script src="js/bullet.js"></script>
-	<script src="js/enemy.js"></script>
-	<script>
-		var timer = null;
-		timer = setInterval(start,30);
-		$("ok").onclick = function() {
-//			还原游戏场景
-			score = 0;
-			$("score").innerHTML= "得分:0";
-			var es = document.getElementsByClassName("enemy");
-			for(var i=0; i<es.length; i++) {
-				$("wrap").removeChild(es[i]);
-				i--;
-			}
-			var bs = document.getElementsByClassName("bullet");
-			for(var i=0; i<bs.length; i++) {
-				$("wrap").removeChild(bs[i]);
-				i--;
-			}
-			
-			setHeroStartPosition();
-			
-			$("show").style.display = "none";
-			
-			timer = setInterval(start,30);
-		}
-		function start() {
-//			1. 背景的移动
-			bgMove();
-//			2. hero的操作
-			controlHeroByKeyBoard();
-//			3. 子弹的移动
-			bulletMove();
-//			4. 敌机的移动
-			enemyMove();
-		}
-	</script>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>飞机大战</title>
+  <link rel="stylesheet" type="text/css" href="css/reset.css" />
+  <style>
+    #wrap {
+      width: 320px;
+      height: 568px;
+      background-image: url(img/background.png);
+      background-size: 100% 100%;
+      background-repeat: repeat-y;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero {
+      width: 66px;
+      height: 82px;
+      background-image: url(img/herofly.png);
+      position: absolute;
+    }
+
+    .bullet {
+      width: 6px;
+      height: 14px;
+      background-image: url(img/bullet1.png);
+      position: absolute;
+    }
+
+    .enemy {
+      width: 38px;
+      height: 34px;
+      background-image: url(img/enemy1.png);
+      position: absolute;
+      top: -34px;
+    }
+
+    #score {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      font-size: 20px;
+    }
+
+    #show {
+      width: 200px;
+      height: 140px;
+      background-color: lightgray;
+      border: 1px solid #000;
+      border-radius: 4px;
+      position: absolute;
+      z-index: 1;
+    }
+
+    #word {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 20px;
+    }
+
+    #ok {
+      width: 60px;
+      height: 30px;
+      margin: 20px auto;
+      border: 1px solid #000000;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    #ok:hover {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="wrap">
+    <p id="score">分数:0</p>
+    <div id="hero"></div>
+    <!--<div class="bullet"></div>-->
+    <!--<div class="enemy"></div>-->
+    <div id="show">
+      <p id="word">#####</p>
+      <div id="ok">👌</div>
+    </div>
+  </div>
+</body>
+<script src="js/public.js"></script>
+<script src="js/device.js"></script>
+<script src="js/bg.js"></script>
+<script src="js/hero.js"></script>
+<script src="js/bullet.js"></script>
+<script src="js/enemy.js"></script>
+<script>
+  var timer = null;
+  timer = setInterval(start, 30);
+  $("ok").onclick = function () {
+    //			还原游戏场景
+    score = 0;
+    $("score").innerHTML = "得分:0";
+    var es = document.getElementsByClassName("enemy");
+    for (var i = 0; i < es.length; i++) {
+      $("wrap").removeChild(es[i]);
+      i--;
+    }
+    var bs = document.getElementsByClassName("bullet");
+    for (var i = 0; i < bs.length; i++) {
+      $("wrap").removeChild(bs[i]);
+      i--;
+    }
+
+    setHeroStartPosition();
+
+    $("show").style.display = "none";
+
+    timer = setInterval(start, 30);
+  }
+  function start() {
+    //			1. 背景的移动
+    bgMove();
+    //			2. hero的操作
+    controlHeroByKeyBoard();
+    //			3. 子弹的移动
+    bulletMove();
+    //			4. 敌机的移动
+    enemyMove();
+  }
+</script>
+
 </html>
