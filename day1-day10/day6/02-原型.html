@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原型</title>
+</head>
+<body>
+    
+</body>
+<script>
+    function Cat(nick,type,age,sex) {
+        this.nick = nick;
+        this.type = type;
+        this.age = age;
+        this.sex = sex;
+        // this.miao = function() {
+        //     console.log("ok");
+        // }
+    }
+    //公有属性及方法建议写在原型中
+    // prototype: 原型对象，使用构造函数调用
+    Cat.prototype.skill = "上树";
+    Cat.prototype.miao = function() {
+        console.log("喵喵");
+    }
+
+    var wc = new Cat("小白","白猫",3,"公猫");
+    var bc = new Cat("小黑","黑猫",6,"公猫");
+    console.log(wc,bc);
+    // if (wc.miao === bc.miao) {
+    //     console.log("咱俩都是猫");
+    // }
+    wc.miao();
+</script>
+</html>

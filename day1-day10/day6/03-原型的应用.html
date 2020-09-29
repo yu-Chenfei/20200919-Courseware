@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原型的应用</title>
+</head>
+<body>
+</body>
+<script>
+    // 1. 反转字符串
+    // str = str.split("").reverse().join("");  //6分
+
+    //8分
+    function revereString(str) {
+        return str.split("").reverse().join(""); 
+    }
+
+    // 满分操作
+    String.prototype.reverseString = function() {
+        return this.split("").reverse().join(""); 
+    }
+
+    // 2. 数组去重
+    function singleArr(arr) {
+        var newArr = [];
+        arr.forEach(function(item,index) {
+            if (newArr.indexOf(item) == -1) {
+                newArr.push(item);
+            }
+        })
+        return newArr;
+    }
+
+    // 满分操作
+    Array.prototype.singleArr = function() {
+        var newArr = [];
+        this.forEach(function(item,index) {
+            if (newArr.indexOf(item) == -1) {
+                newArr.push(item);
+            }
+        })
+        return newArr;
+    }
+    var arr = [1,1,2,2,3,4,4,5,5,6,6];
+    console.log(arr.singleArr());
+
+
+
+    // 返回一个数字的6次方
+    // Number.prototype.mi = function(mi) {
+    //     var n = this;
+    //     for (var i=0 ; i<mi-1; i++) {
+    //         n = this * n;
+    //     }
+    //     return n;
+    // }
+    // var a = 2;
+    // console.log(a.mi(4));
+    console.log(Math.pow(2,5));
+    // Math.pow(n,m)  返回n的m次幂
+
+
+    问题: 字符串去重
+</script>
+</html>

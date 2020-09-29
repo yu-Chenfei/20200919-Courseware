@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>封装</title>
+</head>
+<body>
+    封装：将一些属性和方法集合在一起
+</body>
+<script>
+    // 有四种写法
+    // 1. 使用Object
+    // var obj = new Object();
+    // obj.nick = "小黄";
+    // obj.run = function() {
+    //     console.log("我能吃10个人的量");
+    // }
+    // obj.run();
+
+    // 2. 字面量创建/JSON创建
+    // var obj = {
+    //     name: '《我替你记得》',
+    //     price: 25,
+    //     author: "羊毛不会飞",
+    //     now: function() {
+    //         console.log("放在书架上很好看");
+    //     }
+    // }
+
+    // 3. 工厂方式
+    // function createBook(name,author,price) {
+    //     return {
+    //         name: name,
+    //         author: author,
+    //         price: price,
+    //         read: function() {
+    //             console.log("大声朗读，你会挨揍");
+    //         }
+    //     }
+    // }
+    // var shz = createBook("105个男人与3个女人的故事","施耐庵",10);
+
+    // 4. 构造函数(类)创建(推荐 符合OOP原理)
+    function Book(name, author, price) {
+        this.name = name;
+        this.author = author;
+        this.price = price;
+        this.read = function() {
+            console.log("读书让你没时间打游戏");
+        }
+    }
+    var xyj = new Book("西游记","吴承恩",26);
+    var hlm = new Book("红楼梦","曹雪芹",26);
+    if (xjy.read === hlm.read) {
+        console.log("吴承恩与曹雪芹干了一杯");
+    }
+</script>
+</html>
+
+
+<!-- 有这么一类东西 叫做 
+动物：猫  狗  鸟  人
+猫： 白猫  黑猫  花猫   英短
+狗： 白狗  黑狗  花狗   金毛   三傻雪橇犬
+车： 汽车  自行车  火车   
+策哥带的学员：小黄   小支  小样  小宋   小小
+
+类：对象的抽象
+对象：类的实例 -->
+
+<!-- js没有类   面向对象不完全 -->
+<!-- 构造函数：
+当一个类执行new时自动调用的方法，
+为对象开辟内存空间
+
+析构函数：当对象需要销毁释放内存时调用 -->
+
