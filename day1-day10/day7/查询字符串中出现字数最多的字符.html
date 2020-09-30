@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input id="ipt" type="text">
+    <button>check</button>
+</body>
+<script>
+    var ipt = document.getElementById("ipt");
+    var but = document.querySelector("button");
+
+    but.onclick = function() {
+        var str = ipt.value;
+        // 转数组
+        var arr = str.split("");
+        var obj = {};   //因为对象的key值是唯一的
+        arr.forEach(function(item) {
+            if (!obj[item]) {
+                //判断是否有item所代表的属性
+                obj[item] = 0;
+            }
+            obj[item] ++;
+        })
+
+        var key = "";  //出现次数最多的key
+        var count = 0;  //让for in 跳过第一次
+        for (x in obj) {
+            if (count == 0) {
+                // 第一次循环进来
+                key = x;
+            }
+            else {
+                if (obj[x] > obj[key]) {
+                    key = x;
+                }
+            }
+            count ++;
+        }
+
+        console.log("出现最多的字符是" + key);
+        console.log("出现的次数是" + obj[key]);
+    }
+</script>
+</html>
