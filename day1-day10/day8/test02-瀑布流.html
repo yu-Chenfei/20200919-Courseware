@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>瀑布流</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .wrap {
+            width: 400px;
+            margin: 0 auto;
+            border: 1px solid red;
+            overflow: hidden;
+        }
+
+        ul {
+            width: 90px;
+            float: left;
+            margin: 5px;
+        }
+
+        ul li {
+            background-color: tomato;
+            color: white;
+            margin-bottom: 5px;
+            text-align: center;
+            font-size: 3em;
+        }
+
+        /*1em = 父级字体的大小
+			1rem = body字体的大小 */
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <ul>
+            <!--<li>1</li>-->
+        </ul>
+        <ul></ul>
+        <ul></ul>
+        <ul></ul>
+    </div>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    //		需要创建li的数量
+    var count = 200;
+    for (var i = 0; i < count; i++) {
+        var h = rand(100, 300);
+        var min = getMin();
+        $("<li></li>").html(i+1).css({
+            height: h,
+            lineHeight: h+'px'
+        }).appendTo($("ul").eq(min))
+    }
+
+
+
+    //		随机函数 
+    function rand(min, max) {
+        //			var n = Math.random() * (max-min) + min;
+        //			n = Math.round(n);
+        //			return n;
+        return Math.round(Math.random() * (max - min) + min);
+    }
+
+    //获取最矮的ul的下标
+    function getMin() {
+        var min = 0; //最矮的ul的下标
+        for (var i = 1; i < $("ul").length; i++) {
+            var h1 = $("ul").eq(min).outerHeight();
+            var h2 = $("ul").eq(i).outerHeight();
+            if (h1 > h2) {
+                min = i;
+            }
+        }
+        return min;
+    }
+</script>
+
+</html>

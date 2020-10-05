@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        html,body {
+            height: 100%;
+        }
+        .bg {
+            background-size: 100% 100%;
+            background-position: center center;
+        }
+        body {
+            background-image: url(img/hg.jpg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        ul {
+            width: 1200px;
+            height: 600px;
+            background-color: skyblue;
+        }
+        li {
+            transition: .3s;
+        }
+        li,p {
+            width: 100px;
+            height: 600px;
+            float: left;
+            background-size: 800px 600px;
+            background-position: center center;
+        }
+        /* li:nth-of-type(1) {
+            width: 800px;
+        } */
+        p {
+            background-color: rgba(255,255,255,.5);
+            line-height: 600px;
+            font-size: 30px;
+            text-align: center;
+            color: white;
+        }
+        .open {
+            width: 800px;
+        }
+    </style>
+</head>
+<body class="bg">
+    <ul>
+        <li class="open" style="background-image:url(img/hg.jpg)">
+            <p>1</p>
+        </li>
+        <li style="background-image:url(img/zly.jpg)">
+            <p>2</p>
+        </li>
+        <li style="background-image:url(img/cyq.jpg)">
+            <p>3</p>
+        </li>
+        <li style="background-image:url(img/czy.jpg)">
+            <p>4</p>
+        </li>
+        <li style="background-image:url(img/ys.png)">
+            <p>5</p>
+        </li>
+    </ul>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $("li").click(function() {
+        // 1. 
+        // $("li").width(100);
+        // $(this).width(800);
+        // $(this).width(800).siblings().width(100);
+        
+        // 2. 
+        var arr = ["hg.jpg","zly.jpg","cyq.jpg","czy.jpg","ys.png"];
+        $(this).addClass("open").siblings().removeClass("open");
+        var index  = $("li").index($(this))
+        $("body").css({
+            backgroundImage: `url(img/${arr[index]})`
+        })
+
+        // 3.
+        // $(this).animate({
+        //     width: 800
+        // },300)
+        // $(this).siblings().animate({
+        //     width: 100
+        // },300)
+    })
+</script>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird</title>
+    <style>
+        @keyframes move {
+            from {background-position: 0 0;}
+            to {background-position: -320px 0;}
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .wrap {
+            width: 320px;
+            height: 568px;
+            overflow: hidden;
+            position: relative;
+            background-image: url(img/fb/bg.jpg);
+            background-size: 100% 100%;
+            margin: 0 auto;
+            animation: move 4s linear infinite;
+        }
+        #bird {
+            width: 40px;
+            height: 30px;
+            position: absolute;
+            left: 30px;
+            top: 269px;
+            background-image: url(img/fb/downbird0.png);
+        }
+        .zhuzi {
+            
+        }
+        .up {
+            height: 200px;
+            width: 62px;
+            position: absolute;
+            top: 0;
+            left: 320px;
+            background-image: url(img/fb/up_mod.png);
+        }
+        .up .head {
+            width: 62px;
+            height: 60px;
+            position: absolute;
+            bottom: 0;
+            background-image: url(img/fb/up_pipe.png);
+        }
+        .down {
+            height: 200px;
+            width: 62px;
+            position: absolute;
+            bottom: 0;
+            left: 320px;
+            background-image: url(img/fb/down_mod.png);
+        }
+        .down .head {
+            width: 62px;
+            height: 60px;
+            position: absolute;
+            top: 0;
+            background-image: url(img/fb/down_pipe.png);
+        }
+        #score {
+            position: absolute;
+            font-size: 30px;
+            width: 100%;
+            top: 0;
+            text-align: center;
+            line-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <p id="score">0</p>
+        <div id="bird"></div>
+        <div class="zhuzi">
+            <!-- <div class="guan up">
+                <div class="head"></div>
+            </div>
+            <div class="guan down">
+                <div class="head"></div>
+            </div> -->
+        </div>
+    </div>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    var timer = null;
+    var count = 0;
+    var isUp = false;  //向上飞还是向下飞
+    var maxSpeed = 8; //最大速度限制
+    var speed = 0; //速度
+    var score = 0; //得分 
+    var isScore = true; //是否得分
+    timer = setInterval(function() {
+        count ++;
+        // 管道运动
+        pipeMove();
+        // 小鸟运动
+        birdMove();
+        //碰撞检测 
+        check();
+    },30);
+
+    function check() {
+        $(".guan").each(function() {
+            if (isCrash($("#bird"),$(this))) {
+                //碰了
+                clearInterval(timer);
+                alert("game over");
+            }
+        })
+    }
+
+    $(".wrap").click(function() {
+        isUp = true;
+        speed = maxSpeed;
+    })
+
+    function birdMove() {
+        if (isUp) {
+            speed -= 0.5;
+            speed = speed < 0 ? 0 : speed;
+            if (speed <= 0) {
+                isUp = false;
+            }
+            $("#bird").css({
+                top: $("#bird").position().top - speed
+            })
+        } else {
+            speed += 0.7;
+            speed = speed > maxSpeed ? maxSpeed : speed;
+            $("#bird").css({
+                top: $("#bird").position().top + speed
+            })
+        }
+    }
+
+    function pipeMove() {
+        // 1. 管道的生成
+        if (count == 100) {
+            createPipe()
+            count = 0;
+        }
+        // 2. 管道的运动
+        $(".guan").each(function() {
+            var left = $(this).position().left;
+            if (left <= -62) {
+                // 管道飞出去了
+                isScore = true;
+                $(this).remove();
+                return;
+            }
+            $(this).css({
+                left: left-2
+            })
+        })
+        // 3. 是否得分
+        if ($(".up").length == 0) {
+            return;
+        }
+        if (isScore && $(".up").eq(0).position().left <= -32) {
+            score ++;
+            isScore = false;
+            $("#score").html(score);
+        }
+    }
+    function createPipe() {
+        var h1 = rand(100,260);
+        var h2 = 568 - 120 - h1;
+        var str = `
+            <div class="guan up" style="height: ${h1}px">
+                <div class="head"></div>
+            </div>
+            <div class="guan down" style="height: ${h2}px">
+                <div class="head"></div>
+            </div>
+        `;
+        $(str).appendTo($(".zhuzi"))
+    }
+
+    function rand(min,max) {
+        return Math.round(Math.random() * (max-min) + min);
+    }
+
+    //碰撞检测
+    function isCrash(a,b){
+        var l1 = a.position().left;
+        var r1 = l1 + a.outerWidth();
+        var t1 = a.position().top;
+        var b1 = t1 + a.outerHeight();
+        var l2 = b.position().left;
+        var r2 = l2 + b.outerWidth();
+        var t2 = b.position().top;
+        var b2 = t2 + b.outerHeight();
+        if (r1<l2 || r2<l1 || b1<t2 || b2<t1) {
+            // 不碰撞
+            return false;
+        }
+        return true;
+    }
+</script>
+</html>

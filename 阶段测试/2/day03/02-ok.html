@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拓展版瀑布流</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        ul {
+            margin: 0 auto;
+            position: relative;
+        }
+        li {
+            width: 190px;
+            position: absolute;
+            background-color: pink;
+            font-size: 36px;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <ul></ul>
+</body>
+<script>
+    // 要求： 创建100个li，做出拓展版的效果来
+
+    // 获取ul
+    var ul = document.querySelector("ul");
+    // 一些虚拟的参数
+    var colWidth = 200;  //虚拟的列宽 200px
+    var col = 0;  //虚拟的列数 初始化 ，具体的值应该是 screenWidth / colWidth 取整数
+    // 没有列概念的ul，无法获取最小高度，可以通过设置一个数组，来记录每一列的高度 
+    var arr = [];  //具体的内容由col来决定
+
+    // 设置Ul的样式
+    function setUl() {
+        // col = window的宽度 / 列宽
+        col = Math.floor(window.innerWidth / colWidth)
+        //重新设置ul的宽度
+        ul.style.width = colWidth * col + 'px';
+
+        // 重新填充arr
+        arr = [];
+        for (var i=0; i<col; i++) {
+            arr.push(0);  //来记录每一列的高度 
+        }
+        console.log(arr);
+
+        //填充li
+        setLi();
+    }
+    //执行函数
+    setUl();
+
+    // 填充，设置li
+    function setLi() {
+        ul.innerHTML = "";   //去掉ul中所有的内容
+        //还是有问题，问题:因为所有的li是重新创建的，所以样式有变化，浪费资源
+        for (var i=0; i<100; i++) {
+            var li = document.createElement("li");
+            li.innerHTML = i+1;
+            var h = rand(100,300);
+            //设置高度
+            li.style.height = h + "px";
+            li.style.lineHeight = h + 'px';
+            // 设置left 和 top
+            var min = getMin();
+            var left = 5 + min * colWidth;
+            var top = arr[min];
+            li.style.left = left + 'px';
+            li.style.top = top + 'px';
+            //将li添加到ul中
+            ul.appendChild(li);
+            // 修改arr中的高度
+            arr[min] += (h+10);
+        }
+    }
+
+    //随机函数 
+    function rand(min,max) {
+        return Math.round(Math.random() * (max-min) + min);
+    }
+
+    //得到高度最小的下标值 
+    function getMin() {
+        var min = 0;
+        for (var i=1; i<arr.length; i++) {
+            if (arr[min] > arr[i]) {
+                min = i;
+            }
+        }
+        return min;
+    }
+
+
+    // 浏览器有一个事件resize, 当浏览器的大小改变时调用
+    window.onresize = function() {
+        setUl();
+    }
+
+</script>
+</html>
