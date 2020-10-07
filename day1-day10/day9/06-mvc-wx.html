@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>朋友圈</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    ul {
+      width: 640px;
+      border: 1px solid black;
+    }
+
+    li {
+      overflow: hidden;
+      border-bottom: 1px solid gray;
+    }
+
+    li>img {
+      width: 72px;
+      height: 72px;
+      margin-left: 20px;
+      margin-top: 26px;
+      float: left;
+      background-color: tomato;
+    }
+
+    li .right {
+      float: left;
+      margin-left: 20px;
+      margin-top: 26px;
+      width: 528px;
+    }
+
+    li .right p {
+      font-size: 26px;
+      line-height: 26px;
+      /*			height: 26px;*/
+      width: 510px;
+    }
+
+    li .right .name {
+      color: #506591;
+      overflow: hidden;
+    }
+
+    li .right .content {
+      margin-top: 20px;
+    }
+
+    .shareLink .right .link {
+      display: block;
+      width: 510px;
+      height: 86px;
+      background-color: #f3f3f5;
+      margin-top: 20px;
+    }
+
+    .shareLink .right .link img {
+      width: 68px;
+      height: 68px;
+      float: left;
+      margin: 9px;
+      background-color: deepskyblue;
+    }
+
+    .shareLink .right .link p {
+      float: left;
+      line-height: 30px;
+      font-size: 24px;
+      width: 424px;
+      margin-top: 9px;
+    }
+
+    li .right .time {
+      height: 20px;
+      line-height: 20px;
+      color: #787878;
+      margin-top: 16px;
+      margin-bottom: 24px;
+    }
+
+    .ad .right .showImg {
+      width: 310px;
+      height: 310px;
+      background-color: gold;
+      margin-top: 20px;
+    }
+
+    .ad .right .showImg+p {
+      margin-top: 20px;
+    }
+
+    .ad .right .showImg+p a {
+      color: #4a608e;
+      text-decoration: none;
+    }
+
+    .textImg .right .imgs {
+      width: 510px;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+
+    .textImg .right .imgs div {
+      width: 160px;
+      height: 160px;
+      background-color: plum;
+      float: left;
+      margin: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <ul>
+  </ul>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="js/model.js"></script>
+<script src="js/view.js"></script>
+<script>
+  $.ajax({
+    url: 'json/wx.json',
+    type: "get",
+    success: function (res) {
+      setView(res);
+    }
+  })
+  function setView(arr) {
+    arr.forEach(function (item) {
+      var model = createModel(item);
+      var li = createView(model);
+      $(li).appendTo($("ul"))
+    })
+  }
+</script>
+
+</html>
